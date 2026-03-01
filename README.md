@@ -18,7 +18,7 @@
 
 ```json
 {
-  "rubrics: [
+  "rubrics": [
     "business-energy", "politics"
   ],
   "schedule": {
@@ -46,7 +46,7 @@
     },
     {
       "title": "Бизнес — ТЭК",
-      "id": "business-energy"
+      "id": "business-energy",
       "parentId: "business",
       "link": "https://www.vedomosti.ru/rss/rubric/business/energy"
     }
