@@ -1,36 +1,12 @@
-import { XMLParser } from 'fast-xml-parser'
-import type { NewsItem } from './types.js'
+import { spawn } from "node:child_process"
+import { getUserInput } from "./cli.js"
 
-const BASE_URL = 'https://www.vedomosti.ru/rss/'
 
-function fetchXML(url: string) {
-    return fetch(BASE_URL + url)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Некорректный ответ сервера")
-            }
-            return response.text()
-        })
-        .catch(error => {
-            console.error(error)
-        })
+export default async function run() {
+    const settings = getUserInput()
+
+    setInterval(() => {
+        console.log('hey')
+        spawn('tsx', ['src/data/index.ts'])
+    }, 5_000)
 }
-
-function parseXML(rawData: string): NewsItem[] {
-    const parser = new XMLParser()
-    const parsedData = parser.parse(rawData)
-    return parsedData["rss"]["channel"]["item"]
-}
-
-// fetchXML('news')
-fetchXML('rubric/business').then(content => {
-    if (!content) {
-        throw new Error('Отсутствует контент')
-    }
-
-    const data = parseXML(content)
-
-    console.log(
-        ...data.toReversed().map(item => item.title + '\n')
-    )
-})
