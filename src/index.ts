@@ -1,12 +1,12 @@
-import { spawn } from "node:child_process"
 import { getUserInput } from "./cli.js"
-
+import load from "./loader/index.js"
+import generatePdf from "./pdf/index.js"
 
 export default async function run() {
-    const settings = getUserInput()
+    const settings = await getUserInput()
 
-    setInterval(() => {
-        console.log('hey')
-        spawn('tsx', ['src/data/index.ts'])
+    setInterval(async () => {       
+        const news = await load(settings)
+        generatePdf(news)
     }, 5_000)
 }

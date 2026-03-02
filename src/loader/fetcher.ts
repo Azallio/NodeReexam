@@ -12,3 +12,16 @@ export function fetchNews(url: string) {
             console.error(error)
         })
 }
+
+export function fetchRubrics() {
+    return fetch(BASE_URL + "")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Некорректный ответ сервера")
+            }
+            return response.text()
+        })
+        .catch(error => {
+            console.error(error)
+        })
+}

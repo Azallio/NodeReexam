@@ -1,5 +1,5 @@
 import { confirm, checkbox } from "@inquirer/prompts"
-import { loadSettings, writeSettings } from "./settings/index.js"
+import * as storage from "./storage/index.js"
 
 function isInitialRun() {
     return false
@@ -11,7 +11,7 @@ function formatSettings(settings) {
 
 export async function getUserInput() {
     if (!isInitialRun) {
-        const currentSettings = loadSettings()
+        const currentSettings = storage.loadSettings()
         console.log(formatSettings(currentSettings))
         const userWantsToEdit = await confirm({ message: "Хотите изменить настройки?", default: false })
         if (!userWantsToEdit) {
@@ -31,7 +31,7 @@ export async function getUserInput() {
         rubrics: choosenRubrics
     }
 
-    writeSettings(settings)
+    storage.writeSettings(settings)
 
     return settings
 }

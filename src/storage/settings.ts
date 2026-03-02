@@ -1,4 +1,4 @@
-export function writeSettings() {
+export function writeSettings(settings) {
 
 }
 

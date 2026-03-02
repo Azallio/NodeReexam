@@ -1,25 +1,44 @@
-import { fetchNews } from "./fetcher.js"
-import { parseXML } from "./parser.js"
+import * as fetcher from "./fetcher.js"
+import * as parser from "./parser.js"
+import * as storage from '../storage/index.js'
 
-function getNews(rubric) {
-    fetchNews('rubric/business').then(content => {
+function loadNews(rubric) {
+    return fetcher.fetchNews('rubric/business').then(content => {
         if (!content) {
             throw new Error('Отсутствует контент')
         }
 
-        const data = parseXML(content)
+        const data = parser.parseNews(content)
 
-        console.log(
-            ...data.toReversed().map(item => item.title + '\n')
-        )
+        return data.toReversed().map(item => item.title + '\n')
     })
 }
 
-function getRubrics(rubrics) {
+async function loadRubrics() {
+    const { rubrics, last_modified } = parser.parseRubricsJSON()
 
+    if (last_modified > new Date()) {
+        return rubrics
+    }
+
+    const freshRubrics = await fetcher.fetchRubrics()
+    storage.writeRubrics(freshRubrics)
+
+    return freshRubrics
 }
 
 
-export default function getData(settings) {
+export default async function load(settings) {
+    const allRubrics = await loadRubrics()
 
+    // filter by rubrics set in settings
+    const filteredRubrics = allRubrics
+
+    const news = []
+
+    for (const rubric of filteredRubrics) {
+        news.push(loadNews(rubric))
+    }
+
+    return news
 }
