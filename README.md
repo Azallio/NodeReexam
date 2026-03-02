@@ -38,7 +38,7 @@
 
 ##### Парсинг списка рубрик
 
-Парсинг списка рубрик происходит со страницы (https://www.vedomosti.ru/info/rss)[https://www.vedomosti.ru/info/rss], его результаты сохраняются в файл `rubrics.json` в следующем виде:
+Парсинг списка рубрик происходит со страницы [https://www.vedomosti.ru/info/rss](https://www.vedomosti.ru/info/rss), его результаты сохраняются в файл `rubrics.json` в следующем виде:
 
 ```json
 {
