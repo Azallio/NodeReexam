@@ -1,16 +1,17 @@
-import { XMLParser } from 'fast-xml-parser'
-import type { NewsItem } from '../types.js'
+import { XMLParser } from "fast-xml-parser";
+import htmlParser from 'node-html-parser'
+import * as types from "../types.js";
 
-export function parseNews(rawData: string): NewsItem[] {
-    const parser = new XMLParser()
-    const parsedData = parser.parse(rawData)
-    return parsedData["rss"]["channel"]["item"]
+export function parseNews(rawData: string): types.NewsItem[] {
+  const parser = new XMLParser();
+  const parsedData = parser.parse(rawData);
+  return parsedData["rss"]["channel"]["item"];
 }
 
-export function parseRubricsXML() {
+export function parseRubrics(rawData: string): types.RubricItem[] {
+  const root = htmlParser.parse(rawData)
+  const rubrics: types.RubricItem[] = []
 
-}
 
-export function parseRubricsJSON() {
-    
+  return rubrics
 }
