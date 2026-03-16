@@ -1,5 +1,5 @@
 import { readFile, writeFile } from "node:fs";
-import { FileNotFoundError } from "./exceptions.js";
+import { FileNotFoundError } from "../exceptions.js";
 import type { Rubrics, RubricsStorage } from "../types.js";
 
 const RUBRICS_PATH = new URL("./rubrics.json", import.meta.url);

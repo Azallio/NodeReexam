@@ -1,5 +1,5 @@
 import { readFile, writeFile } from "node:fs/promises";
-import { FileNotFoundError } from "./exceptions.js";
+import { FileNotFoundError } from "../exceptions.js";
 import type { Settings } from "../types.js";
 
 const SETTINGS_PATH = new URL("./settings.json", import.meta.url);
