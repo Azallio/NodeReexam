@@ -3,6 +3,23 @@ import puppeteer from 'puppeteer'
 import type { RenderContext } from '../types.js'
 
 function renderMarkup(context: RenderContext): Promise<string> {
+  /**
+   * Рендерит информацию о новостях по рубрикам в html-строку по шаблону.
+   * 
+   * @remarks
+   * Получает на вход объект с новостями, передает его в шаблонизатор,
+   * возвращает сгенерированную строку с HTML.
+   *  
+   * @privateRemarks
+   * Для шаблонизации используется библиотека `ejs`, 
+   * которая отрисовывает данные в подготовленные шаблоны 
+   * `templates/index.ejs`, `templates/header.partial.ejs`, 
+   * `templates/newsItem.partial.ejs`.
+   * 
+   * @param context - объект с данными о новостях. 
+   * 
+   */
+
   const mainTemplatePath = String(new URL('./templates/index.ejs', import.meta.url))
 
   return new Promise((resolve, reject) => {
@@ -17,14 +34,30 @@ function renderMarkup(context: RenderContext): Promise<string> {
 }
 
 export default async function savePdf(context: RenderContext) {
+  /**
+   * Сохраняет html-контент в pdf-файл.
+   * 
+   * @remarks
+   * Получает на вход строку с html-контентом, помещает 
+   * его на страницу браузера и сохраняет в pdf-формат.
+   * 
+   * Для сохранения использует файлы с названием вида 
+   * `vedomosti_yyyy_mm_dd_hh.pdf`. 
+   * 
+   * @privateRemarks
+   * Для сохранения используется библиотеку `puppeteer`, 
+   * которая отвечает за открытие браузера, создание страницы,
+   * наполнение ее html-содержимым и сохранение страницы в pdf.
+   * 
+   * @param context - строка с HTML-содержимым для выгрузки. 
+   * 
+   */
+  
   const pathToSaveFile = ''
 
   try {
     const htmlContent = await renderMarkup(context)
     const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    await page.setContent(htmlContent)
-    await page.pdf({ path: pathToSaveFile, format: "A4" })
     await browser.close();
   } catch (error) {
     console.error(error)

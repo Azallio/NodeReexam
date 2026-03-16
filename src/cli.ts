@@ -53,15 +53,7 @@ export async function getUserInput(): Promise<types.Settings> {
 
   const choosenDaysOfWeek = await checkbox<types.DayOfWeek>({
     message: "В какие дни желаете получать новости?",
-    choices: [
-      { name: "Понедельник", value: 1 },
-      { name: "Вторник", value: 2 },
-      { name: "Среда", value: 3 },
-      { name: "Четверг", value: 4 },
-      { name: "Пятница", value: 5 },
-      { name: "Суббота", value: 6 },
-      { name: "Воскресенье", value: 0 },
-    ],
+    choices: [],
   });
 
   const choosenTime = await checkbox<types.Time>({

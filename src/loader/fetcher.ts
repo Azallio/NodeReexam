@@ -1,6 +1,6 @@
 const RUBRICS_URL = "https://www.vedomosti.ru/info/rss/";
 
-function baseFetch(url: string) {
+function baseFetch(url: string): Promise<string> {
   return fetch(url)
     .then((response) => {
       if (!response.ok) {
