@@ -51,7 +51,7 @@ export default async function savePdf(context: RenderContext) {
    * 
    */
   
-  const pathToSaveFile = ''
+  const pathToSaveFile = '' // TODO сгенерировать актуальное название файла
 
   try {
     const htmlContent = await renderMarkup(context)

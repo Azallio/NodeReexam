@@ -1,3 +1,7 @@
+/**
+ * Файл не требует изменений и дополнений 
+ */
+
 import * as cli from "./cli.js";
 import * as storage from './storage/index.js'
 import * as types from './types.js'

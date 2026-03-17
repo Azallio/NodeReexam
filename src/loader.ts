@@ -3,6 +3,7 @@ import { XMLParser } from "fast-xml-parser";
 import * as storage from "./storage/index.js";
 import * as types from "./types.js";
 
+
 function fetchNews(rubricUrl: string): Promise<string> {
   return fetch(rubricUrl)
     .then((response) => {
@@ -17,19 +18,22 @@ function fetchNews(rubricUrl: string): Promise<string> {
     });
 }
 
+
 function parseNews(rawData: string): types.NewsItem[] {
   const parser = new XMLParser();
   const parsedData = parser.parse(rawData);
   return parsedData["rss"]["channel"]["item"];
 }
 
+
 function loadNewsByRubric(rubricUrl: string): Promise<types.NewsItem[]> {
   return fetchNews("https://www.vedomosti.ru/rss/rubric/business.xml")
     .then(parseNews);
 }
 
-export async function load(rubricsOfInterest: RubricItem["link"][]): Promise<types.RenderContext> {
-  const { rubrics: allRubrics } = await storage.loadRubrics();
+
+export async function load(rubricsOfInterest: types.RubricItem["link"][]): Promise<types.RenderContext> {
+  const allRubrics = await storage.loadRubrics();
 
   // filter by rubrics set in settings
   const filteredRubrics = allRubrics;
