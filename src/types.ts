@@ -12,8 +12,6 @@ export type NewsItem = {
 
 export type RubricItem = {
     title: string;
-    id: string;
-    parentId?: string | undefined;
     link: string;
 };
 
@@ -25,14 +23,6 @@ export type Rubrics = {
     rubrics: RubricItem[];
 };
 
-export type RubricsStorage = Rubrics & {
-    lastModified: string;
-};
-
 export type Settings = {
-    rubrics: RubricItem["id"][];
-    schedule: {
-        daysOfWeek: DayOfWeek[];
-        time: Time[];
-    };
+    selectedRubrics: RubricItem["link"][];
 };

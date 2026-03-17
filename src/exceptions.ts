@@ -4,10 +4,3 @@ export class FileNotFoundError extends Error {
         this.name = "FileNotFoundError"
     }
 }
-
-export class SettingsOutdatedError extends Error {
-    constructor() {
-        super()
-        this.name = "SettingsOutdatedError"
-    }
-}

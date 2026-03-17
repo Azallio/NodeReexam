@@ -12,15 +12,13 @@ function renderMarkup(context: RenderContext): Promise<string> {
    *  
    * @privateRemarks
    * Для шаблонизации используется библиотека `ejs`, 
-   * которая отрисовывает данные в подготовленные шаблоны 
-   * `templates/index.ejs`, `templates/header.partial.ejs`, 
-   * `templates/newsItem.partial.ejs`.
+   * которая отрисовывает данные в подготовленный шаблон 
    * 
    * @param context - объект с данными о новостях. 
    * 
    */
 
-  const mainTemplatePath = String(new URL('./templates/index.ejs', import.meta.url))
+  const mainTemplatePath = String(new URL('./template.ejs', import.meta.url))
 
   return new Promise((resolve, reject) => {
     ejs.renderFile(mainTemplatePath, { context }, (error: Error | null, html: string) => {
@@ -42,7 +40,7 @@ export default async function savePdf(context: RenderContext) {
    * его на страницу браузера и сохраняет в pdf-формат.
    * 
    * Для сохранения использует файлы с названием вида 
-   * `vedomosti_yyyy_mm_dd_hh.pdf`. 
+   * `vedomosti_yyyy_mm_dd_hh_mm.pdf`. 
    * 
    * @privateRemarks
    * Для сохранения используется библиотеку `puppeteer`, 
@@ -58,6 +56,11 @@ export default async function savePdf(context: RenderContext) {
   try {
     const htmlContent = await renderMarkup(context)
     const browser = await puppeteer.launch();
+
+    // TODO создать в браузере новую страницу
+    // TODO задать странице html-содержимое
+    // TODO сохранить страницу в pdf в формате A4
+
     await browser.close();
   } catch (error) {
     console.error(error)

@@ -1,29 +1,10 @@
-import { readFile, writeFile } from "node:fs";
+import { readFile } from "node:fs";
 import { FileNotFoundError } from "../exceptions.js";
-import type { Rubrics, RubricsStorage } from "../types.js";
+import type { Rubrics } from "../types.js";
 
 const RUBRICS_PATH = new URL("./rubrics.json", import.meta.url);
 
-export function writeRubrics(rubrics: Rubrics["rubrics"]): Promise<void> {
-    /**
-     * Осуществляет асинхронную запись информации о рубриках в файл.
-     * 
-     * @privateRemarks
-     * Используется функция fs::writeFile в коллбэк-стиле
-     * 
-     * @param rubrics - объект с информациях о рубриках
-     * 
-     * @returns Промис, который разрешается при успешной записи,
-     * отклоняется при возникновении ошибок записи
-     * 
-     */
-
-    return new Promise((resolve, reject) => {
-
-    })
-}
-
-export function loadRubrics(): Promise<RubricsStorage> {
+export function loadRubrics(): Promise<Rubrics> {
     /**
      * Осуществляет асинхронное чтение информации о рубриках из файла.
      *
