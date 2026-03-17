@@ -1,10 +1,8 @@
 import { XMLParser } from "fast-xml-parser";
 
-import * as storage from "./storage/index.js";
 import * as types from "./types.js";
 
-
-function fetchNews(rubricUrl: string): Promise<string> {
+function fetchNewsByRubric(rubricUrl: string): Promise<string> {
   return fetch(rubricUrl)
     .then((response) => {
       if (!response.ok) {
@@ -14,33 +12,53 @@ function fetchNews(rubricUrl: string): Promise<string> {
     })
     .catch((error) => {
       console.error(`Ошибка при получении новостей по ${rubricUrl}`);
-      throw error
+      throw error;
     });
 }
 
+function parseNewsByRubric(rawData: string): types.NewsItem[] {
+  /**
+   * Парсинг XML-данных с новостями.
+   *
+   * @privateRemarks
+   * Для парсинга используется библиотека `fast-xml-parser`.
+   *
+   * @todo
+   * Дополните функцию для соответствия результатов 
+   * формату `types.NewsItem[]`
+   *
+   * @param rawData - сырая строка с xml.
+   *
+   * @returns массив новостей.
+   */
 
-function parseNews(rawData: string): types.NewsItem[] {
   const parser = new XMLParser();
   const parsedData = parser.parse(rawData);
-  return parsedData["rss"]["channel"]["item"];
-}
 
+  return
+}
 
 function loadNewsByRubric(rubricUrl: string): Promise<types.NewsItem[]> {
-  return fetchNews("https://www.vedomosti.ru/rss/rubric/business.xml")
-    .then(parseNews);
+  /**
+   * Загрузка новостей по адресу рубрики.
+   *
+   * @todo
+   * Исправьте ошибку
+   *
+   * @param rubricUrl - ссылка на страницу с новостями по рубрике.
+   *
+   * @returns массив новостей.
+   */
+
+  return fetchNewsByRubric("https://www.vedomosti.ru/rss/rubric/business.xml").then(
+    parseNewsByRubric,
+  );
 }
 
-
-export async function load(rubricsOfInterest: types.RubricItem["link"][]): Promise<types.RenderContext> {
-  const allRubrics = await storage.loadRubrics();
-
-  // filter by rubrics set in settings
-  const filteredRubrics = allRubrics;
-
+export async function load(rubricsOfInterest: types.Rubrics): Promise<types.RenderContext> {
   const news: { [key: string]: types.NewsItem[] } = {};
 
-  for (const rubric of filteredRubrics) {
+  for (const rubric of rubricsOfInterest) {
     news[rubric.title] = await loadNewsByRubric(rubric.link);
   }
 

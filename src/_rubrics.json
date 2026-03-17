@@ -1,0 +1,24 @@
+{
+  "rubrics": [
+    {
+      "title": "Бизнес",
+      "link": "https://www.vedomosti.ru/rss/rubric/business"
+    },
+    {
+      "title": "Стиль жизни",
+      "link": "https://www.vedomosti.ru/rss/rubric/lifestyle"
+    },
+    {
+      "title": "Финансы",
+      "link": "https://www.vedomosti.ru/rss/rubric/finance"
+    },
+    {
+      "title": "Политика",
+      "link": "https://www.vedomosti.ru/rss/rubric/politics"
+    },
+    {
+      "title": "Технологии",
+      "link": "https://www.vedomosti.ru/rss/rubric/technology"
+    }
+  ]
+}

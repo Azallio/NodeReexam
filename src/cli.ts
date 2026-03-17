@@ -1,36 +1,42 @@
 import { checkbox } from "@inquirer/prompts";
 import * as types from "./types.js";
 
-export async function getUserInput(): Promise<types.Settings> {
+export async function getUserInput(): Promise<types.Rubrics> {
   /**
-   * Интерактивный консольный ввод настроек.
-   * 
+   * Интерактивный консольный ввод предпочтений.
+   *
    * @remarks
-   * Пользователь выбирает интересующие его
-   * новостные рубрики (категории) из списка.
-   * Выбор множественный.
-   * 
+   * Пользователь выбирает (множественный выбор)
+   * интересующие его новостные рубрики из списка.
+   *
    * @privateRemarks
    * Используются промпты из @inquirer/prompts.
    *
-   * Для получения перечня рубрик перед выдачей 
-   * используется storage::loadRubrics().
-   * 
-   * @returns промис, разрешающийся настройками
-   * 
-   * @throws если не удается получить настройки. 
-   * 
+   * @todo
+   * Предоставляйте пользователю данные для выбора
+   * на основе функции `storage::loadRubrics()`.
+   *
+   * @returns промис, разрешающийся выбранными рубриками
+   *
    */
 
-  const selectedRubrics = await checkbox<types.RubricItem["id"]>({
+  return await checkbox<types.RubricItem>({
     message: "Выберите интересующие рубрики",
     choices: [
-      { name: "Бизнес - Энергетика", value: "business-energy" },
-      { name: "Политика", value: "politics" },
+      {
+        name: "Бизнес",
+        value: {
+          link: "https://www.vedomosti.ru/rss/rubric/business",
+          title: "Бизнес",
+        },
+      },
+      {
+        name: "Стиль жизни",
+        value: {
+          link: "https://www.vedomosti.ru/rss/rubric/lifestyle",
+          title: "Стиль жизни",
+        },
+      },
     ],
   });
-
-  return {
-    selectedRubrics,
-  };
 }
