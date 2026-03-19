@@ -1,6 +1,6 @@
-import { XMLParser } from "fast-xml-parser";
+import { XMLParser } from "fast-xml-parser"
 
-import * as types from "./types.js";
+import * as types from "./types.js"
 
 function fetchNewsByRubric(rubricUrl: string): Promise<string> {
   return fetch(rubricUrl)
@@ -32,10 +32,20 @@ function parseNewsByRubric(rawData: string): types.NewsItem[] {
    * @returns массив новостей.
    */
 
-  const parser = new XMLParser();
+  const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: "@_" });
   const parsedData = parser.parse(rawData);
 
-  return
+  const items: unknown[] = parsedData?.rss?.channel?.item ?? [];
+  const itemsArray = Array.isArray(items) ? items : [items];
+
+  return itemsArray.map((item: any) => ({
+    title: item.title ?? "",
+    link: item.link ?? "",
+    author: item.author ?? item["dc:creator"] ?? "",
+    enclosure: item.enclosure?.["@_url"] ?? undefined,
+    description: item.description ?? "",
+    pubDate: item.pubDate ?? "",
+  }));
 }
 
 function loadNewsByRubric(rubricUrl: string): Promise<types.NewsItem[]> {
@@ -50,9 +60,7 @@ function loadNewsByRubric(rubricUrl: string): Promise<types.NewsItem[]> {
    * @returns массив новостей.
    */
 
-  return fetchNewsByRubric("https://www.vedomosti.ru/rss/rubric/business.xml").then(
-    parseNewsByRubric,
-  );
+  return fetchNewsByRubric(rubricUrl).then(parseNewsByRubric);
 }
 
 export async function load(rubricsOfInterest: types.Rubrics): Promise<types.RenderContext> {

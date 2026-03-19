@@ -1,6 +1,7 @@
-import ejs from "ejs";
-import puppeteer from "puppeteer";
-import type { RenderContext } from "./types.js";
+import ejs from "ejs"
+import { fileURLToPath } from "node:url"
+import puppeteer from "puppeteer"
+import type { RenderContext } from "./types.js"
 
 function renderMarkup(context: RenderContext): Promise<string> {
   /**
@@ -23,10 +24,16 @@ function renderMarkup(context: RenderContext): Promise<string> {
    * @returns сгенерированную строку с HTML
    */
 
-  const mainTemplatePath = String(new URL("./_template.ejs", import.meta.url));
+  const mainTemplatePath = fileURLToPath(new URL("./_template.ejs", import.meta.url));
 
   return new Promise((resolve, reject) => {
-    ejs.renderFile(mainTemplatePath, { context }, (error: Error | null, html: string) => { });
+    ejs.renderFile(mainTemplatePath, { context }, (error: Error | null, html: string) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(html);
+      }
+    });
   });
 }
 
@@ -43,7 +50,13 @@ function generateFilename(): string {
    *
    **/
 
-  return "vedomosti.pdf";
+  const now = new Date();
+  const yyyy = now.getFullYear();
+  const mm = String(now.getMonth() + 1).padStart(2, "0");
+  const dd = String(now.getDate()).padStart(2, "0");
+  const hh = String(now.getHours()).padStart(2, "0");
+  const min = String(now.getMinutes()).padStart(2, "0");
+  return `vedomosti_${yyyy}_${mm}_${dd}_${hh}_${min}.pdf`;
 }
 
 export async function save(context: RenderContext) {
@@ -73,7 +86,9 @@ export async function save(context: RenderContext) {
   try {
     const htmlContent = await renderMarkup(context);
     const browser = await puppeteer.launch();
-
+    const page = await browser.newPage();
+    await page.setContent(htmlContent, { waitUntil: "networkidle0" });
+    await page.pdf({ path: pathToSaveFile, format: "A4" });
     await browser.close();
   } catch (error) {
     console.error(error);
