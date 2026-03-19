@@ -14,21 +14,44 @@
 
         body {
             margin: 0;
+            font-family: 'Source Sans Pro', sans-serif;
+        }
+
+        .rubric-title {
+            font-size: 1.5em;
+            margin: 1em 0 0.5em;
+        }
+
+        .news__card {
+            display: block;
+            margin-bottom: 1.5em;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .news__card img {
+            max-width: 100%;
         }
     </style>
 </head>
 
 <body>
     <div class="wrapper">
-        <div class="news">
-            <% news.forEach(function(newsItem, index) { %>
-                <a href="<%- newsItem.link %>" class="news__card">
-                    <img src="<%- newsItem.thumbnail_url %>" alt="<%- newsItem.title.rendered %>">
-                    <h2><%- newsItem.title.rendered %></h2>
-                    <p><%- newsItem.excerpt.rendered %></p>
-                </a>
-            <% }) %>
-        </div>
+        <% Object.entries(context).forEach(function([rubricTitle, newsItems]) { %>
+            <h1 class="rubric-title"><%- rubricTitle %></h1>
+            <div class="news">
+                <% newsItems.forEach(function(newsItem) { %>
+                    <a href="<%- newsItem.link %>" class="news__card">
+                        <% if (newsItem.enclosure) { %>
+                            <img src="<%- newsItem.enclosure %>" alt="<%- newsItem.title %>">
+                        <% } %>
+                        <h2><%- newsItem.title %></h2>
+                        <p><%- newsItem.description %></p>
+                        <small><%- newsItem.author %> — <%- newsItem.pubDate %></small>
+                    </a>
+                <% }) %>
+            </div>
+        <% }) %>
     </div>
 </body>
 

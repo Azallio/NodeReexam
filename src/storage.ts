@@ -27,5 +27,15 @@ export function loadRubrics(): Promise<Rubrics> {
 
     const RUBRICS_PATH = new URL("./_rubrics.json", import.meta.url);
 
-    return readFile()
+    return readFile(RUBRICS_PATH, "utf-8")
+        .then((data) => {
+            const parsed = JSON.parse(data);
+            return parsed.rubrics as Rubrics;
+        })
+        .catch((error: NodeJS.ErrnoException) => {
+            if (error.code === "ENOENT") {
+                throw new FileNotFoundError(`Файл не найден: _rubrics.json`);
+            }
+            throw error;
+        });
 }

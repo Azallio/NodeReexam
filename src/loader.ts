@@ -32,10 +32,22 @@ function parseNewsByRubric(rawData: string): types.NewsItem[] {
    * @returns массив новостей.
    */
 
-  const parser = new XMLParser();
+  const parser = new XMLParser({ ignoreAttributes: false });
   const parsedData = parser.parse(rawData);
 
-  return
+  const items: unknown[] = parsedData?.rss?.channel?.item ?? [];
+
+  return items.map((item: unknown) => {
+    const entry = item as Record<string, unknown>;
+    return {
+      title: String(entry["title"] ?? ""),
+      link: String(entry["link"] ?? ""),
+      author: String(entry["dc:creator"] ?? entry["author"] ?? ""),
+      enclosure: (entry["enclosure"] as Record<string, string> | undefined)?.["@_url"], // fast-xml-parser prefix for XML attributes
+      description: String(entry["description"] ?? ""),
+      pubDate: String(entry["pubDate"] ?? ""),
+    } satisfies types.NewsItem;
+  });
 }
 
 function loadNewsByRubric(rubricUrl: string): Promise<types.NewsItem[]> {
@@ -50,7 +62,8 @@ function loadNewsByRubric(rubricUrl: string): Promise<types.NewsItem[]> {
    * @returns массив новостей.
    */
 
-  return fetchNewsByRubric("https://www.vedomosti.ru/rss/rubric/business.xml").then(
+  const url = rubricUrl.endsWith(".xml") ? rubricUrl : `${rubricUrl}.xml`;
+  return fetchNewsByRubric(url).then(
     parseNewsByRubric,
   );
 }

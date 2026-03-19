@@ -1,4 +1,5 @@
 import { checkbox } from "@inquirer/prompts";
+import * as storage from "./storage.js";
 import * as types from "./types.js";
 
 export async function getUserInput(): Promise<types.Rubrics> {
@@ -20,23 +21,13 @@ export async function getUserInput(): Promise<types.Rubrics> {
    *
    */
 
+  const rubrics = await storage.loadRubrics();
+
   return await checkbox<types.RubricItem>({
     message: "Выберите интересующие рубрики",
-    choices: [
-      {
-        name: "Бизнес",
-        value: {
-          link: "https://www.vedomosti.ru/rss/rubric/business",
-          title: "Бизнес",
-        },
-      },
-      {
-        name: "Стиль жизни",
-        value: {
-          link: "https://www.vedomosti.ru/rss/rubric/lifestyle",
-          title: "Стиль жизни",
-        },
-      },
-    ],
+    choices: rubrics.map((rubric) => ({
+      name: rubric.title,
+      value: rubric,
+    })),
   });
 }
